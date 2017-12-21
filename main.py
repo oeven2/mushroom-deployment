@@ -29,6 +29,20 @@ def predict():
         print('You need to train a model before you can make predictions.')
         return 'error: no model'
 
+@app.route('/predict_raw', methods=['POST'])
+def predict_raw():
+    if model:
+        try:
+            input_df = pd.DataFrame(request.json)
+            predictions = model_utils.predict_raw(input_df, model)
+            return jsonify(predictions)
+        except Exception as e:
+            return jsonify({'error': str(e), 'trace': traceback.format_exc()})
+    else:
+        print('You need to train a model before you can make predictions.')
+        return 'error: no model'
+
+
 
 
 if __name__ == '__main__':
